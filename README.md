@@ -76,12 +76,14 @@ Each image has a corresponding segmentation mask.
 Install dependencies using pip:
 
 ```bash
-
+pip install torch torchvision opencv-python matplotlib tqdm pillow timm numpy
 ```
 ## Training Instructions
 To train the model, run:
 
+```bash
 python train_segmentation.py
+```
 
 This will:
 
@@ -98,34 +100,36 @@ Save trained model
 Generate training graphs
 
 Output files generated:
-
+```
 segmentation_head.pth
 train_stats/
+```
 
 
 train_stats folder contains:
 
-training_curves.png
-
-iou_curves.png
-
-dice_curves.png
-
-evaluation_metrics.txt
+1. training_curves.png
+2. iou_curves.png
+3. dice_curves.png
+4. evaluation_metrics.txt
 
 ## Testing Instructions
 
 To run inference and generate predictions:
 
+```bash
 python test_segmentation.py
+```
 
 
 This will generate:
 
+```
 predictions/
     masks/
     masks_color/
     comparisons/
+```
 
 ## Evaluation Metrics
 
@@ -137,7 +141,9 @@ The following evaluation metrics are used:
 
 Evaluation results are saved in:
 
+```bash
 train_stats/evaluation_metrics.txt
+```
 
 ## Results
 
@@ -153,6 +159,7 @@ Visual predictions demonstrate correct segmentation of terrain classes.
 
 ## Repository Structure
 
+```
 train_segmentation.py
 test_segmentation.py
 segmentation_head.pth
@@ -161,6 +168,7 @@ report.pdf
 requirements.txt
 train_stats/
 predictions/
+```
 
 ## Hardware Used
 
