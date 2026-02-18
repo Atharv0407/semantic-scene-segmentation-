@@ -1,149 +1,199 @@
-PROJECT OVERVIEW
+# Offroad Semantic Segmentation using DINOv2
+Duality AI Hackathon Submission
 
-This project presents our solution for the Offroad Autonomy Segmentation Challenge.
+---
 
-We trained a semantic segmentation model using synthetic desert data and evaluated its performance on unseen desert environments. The objective was to maximize IoU score while maintaining good generalization and efficiency.
+## Project Overview
 
-OBJECTIVE
+This project implements a semantic segmentation model for offroad environments using the Duality AI Falcon synthetic dataset. The objective is to classify each pixel in an image into one of the terrain classes such as trees, bushes, grass, rocks, landscape, and sky.
 
-Train a semantic segmentation model on synthetic desert data
+Semantic segmentation is an essential computer vision task used in autonomous navigation, robotics, and offroad vehicle perception.
 
-Evaluate performance on unseen test images
+This implementation uses a pretrained DINOv2 Vision Transformer backbone and a ConvNeXt-style segmentation head.
 
-Optimize IoU score and inference performance
+---
 
-Document failure cases and improvements
+## Model Architecture
 
-DATASET STRUCTURE
+### Backbone
+- Model: DINOv2 Vision Transformer (ViT-S/14)
+- Purpose: Feature extraction
+- Pretrained on large-scale image datasets
+- Frozen during training to leverage pretrained knowledge
 
-dataset/
+### Segmentation Head
+- ConvNeXt-style convolutional architecture
+- Takes backbone features as input
+- Outputs pixel-wise class predictions
 
-train/
-    images/
-    masks/
+### Number of Classes
 
-val/
-    images/
-    masks/
+The model predicts 10 classes:
 
-testImages/
+0: Background  
+1: Trees  
+2: Lush Bushes  
+3: Dry Grass  
+4: Dry Bushes  
+5: Ground Clutter  
+6: Logs  
+7: Rocks  
+8: Landscape  
+9: Sky  
 
+---
 
-Classes:
+## Dataset
 
-100 - Trees
-200 - Lush Bushes
-300 - Dry Grass
-500 - Dry Bushes
-550 - Ground Clutter
-600 - Flowers
-700 - Logs
-800 - Rocks
-7100 - Landscape
-10000 - Sky
+Dataset provided by Duality AI Falcon simulation platform.
 
-ENVIRONMENT SETUP
+Structure:
 
-Install Anaconda or Miniconda.
+Offroad_Segmentation_Training_Dataset/
 
-Navigate to the ENV_SETUP folder.
+train/  
+&nbsp;&nbsp;&nbsp;&nbsp;Color_Images/  
+&nbsp;&nbsp;&nbsp;&nbsp;Segmentation/  
 
-Run:
+val/  
+&nbsp;&nbsp;&nbsp;&nbsp;Color_Images/  
+&nbsp;&nbsp;&nbsp;&nbsp;Segmentation/  
 
-Windows:
-setup_env.bat
+Offroad_Segmentation_testImages/
 
-Mac/Linux:
-Create and run setup_env.sh with equivalent commands.
+Color_Images/  
+Segmentation/  
 
-Activate environment:
+Training images: 2857  
+Validation images: 317  
 
-conda activate EDU
+Each image has a corresponding segmentation mask.
 
-HOW TO TRAIN THE MODEL
+---
 
-Open terminal or Anaconda Prompt.
+## Installation
 
-Navigate to the project directory.
+Install dependencies using pip:
 
-Activate environment:
+```bash
 
-conda activate EDU
+```
+## Training Instructions
+To train the model, run:
 
-Run training:
-
-python train.py
-
-Training logs and checkpoints will be saved inside the "runs/" directory.
-
-HOW TO TEST THE MODEL
-
-After training is complete:
-
-python test.py
+python train_segmentation.py
 
 This will:
 
-Generate predictions
+Load dataset
 
-Compute IoU score
+Load pretrained DINOv2 backbone
 
-Output evaluation metrics
+Train segmentation head
 
-REPRODUCING FINAL RESULTS
+Compute metrics
 
-Ensure dataset is correctly structured.
+Save trained model
 
-Activate EDU environment.
+Generate training graphs
 
-Run train.py.
+Output files generated:
 
-Run test.py.
+segmentation_head.pth
+train_stats/
 
-Compare IoU score with reported benchmark.
 
-PERFORMANCE METRICS
+train_stats folder contains:
 
-Primary Metric:
+training_curves.png
 
-IoU (Intersection over Union)
+iou_curves.png
 
-Additional Evaluation:
+dice_curves.png
 
-Training Loss
+evaluation_metrics.txt
 
-Validation Loss
+## Testing Instructions
 
-Failure Case Analysis
+To run inference and generate predictions:
 
-NOTES
+python test_segmentation.py
 
-Test images were NOT used during training.
 
-Training, validation, and test sets were kept strictly separated.
+This will generate:
 
-Model performance depends on hardware (GPU recommended).
+predictions/
+    masks/
+    masks_color/
+    comparisons/
 
-Expected inference speed benchmark: < 50ms per image.
+## Evaluation Metrics
 
-SUBMISSION CONTENTS
+The following evaluation metrics are used:
 
-This repository contains:
+1. Mean IoU (Intersection over Union)
+2. Dice Score
+3. Pixel Accuracy
 
-train.py
+Evaluation results are saved in:
 
-test.py
+train_stats/evaluation_metrics.txt
 
-Configuration files
+## Results
 
-Model weights
+The model successfully learns to segment offroad terrain using synthetic data.
 
-Final Hackathon Report
+Performance improves steadily during training as shown in:
 
-README.txt
+1. IoU curves
+2. Loss curves
+3. Dice score curves
 
-CONTACT & SUPPORT
+Visual predictions demonstrate correct segmentation of terrain classes.
 
-For issues during development, refer to the hackathon Discord server or official documentation.
+## Repository Structure
 
-END OF FILE
+train_segmentation.py
+test_segmentation.py
+segmentation_head.pth
+README.md
+report.pdf
+requirements.txt
+train_stats/
+predictions/
+
+## Hardware Used
+
+Local training:
+CPU training environment
+
+Cloud training:
+Google Colab GPU (NVIDIA Tesla T4)
+
+## Challenges Faced
+
+1. Limited GPU availability locally
+2. Long training time on CPU
+3. Class imbalance in dataset
+
+## Solutions Applied
+
+1. Used pretrained DINOv2 backbone
+2. Used ConvNeXt segmentation head
+3. Used Google Colab GPU for faster training
+4.Optimized hyperparameters
+
+## Future Improvements
+
+Possible improvements include:
+
+1.Training larger backbone models
+2.Applying data augmentation
+3.Increasing number of training epochs
+4.Using advanced segmentation architectures
+
+## Conclusion
+
+This project successfully demonstrates semantic segmentation of offroad environments using pretrained transformer-based feature extraction and convolutional segmentation head.
+
+The model achieves strong performance and demonstrates the effectiveness of synthetic training data for real-world autonomous navigation tasks.
